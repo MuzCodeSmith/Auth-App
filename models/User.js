@@ -20,3 +20,5 @@ const userSchema = new mongoose.Schema({
         enum:["Admin","Student","Visitor"]
     }
 })
+
+module.exports = mongoose.model('user',userSchema)

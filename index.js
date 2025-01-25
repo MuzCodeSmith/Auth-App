@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json())
 
-const user = require('./Routes/User');
+const user = require('./routes/User');
 app.use("/api/v1",user)
 
 app.listen(PORT,()=>{
