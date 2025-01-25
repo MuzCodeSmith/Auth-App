@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
 
-app.get('/',(req,res)=>{
-    res.send('<h1>Home Page</h1>')
-})
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000,()=>{
+app.use(express.json())
+
+const user = require('./Routes/User');
+app.use("/api/v1",user)
+
+app.listen(PORT,()=>{
     console.log("server started successfully")
 })
 
