@@ -78,9 +78,11 @@ exports.login = async (req,res) =>{
             id:foundUser._id,
             role:foundUser.role
         } 
-        let token = jwt.sign(payload,process.env.JWT_SECRET,{
+        let token = await jwt.sign(payload,process.env.JWT_SECRET,{
             expiresIn:"2h",
         })
+       
+        foundUser = foundUser.toObject();  // convert a Mongoose document into a plain JavaScript object.
         foundUser.token = token;
         foundUser.password = undefined;
         const options = {
@@ -90,7 +92,7 @@ exports.login = async (req,res) =>{
         res.cookie("token",token,options).status(200).json({
             success:true,
             token,
-            foundUser,
+            user:foundUser,
             message:"User Logged In Successfully"
         })
 
