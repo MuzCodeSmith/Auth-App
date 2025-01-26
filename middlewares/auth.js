@@ -32,3 +32,37 @@ exports.auth = async (req,res,next) =>{
         })  
     }
 }
+
+exports.isStudent = async (req,res,next) =>{
+    try {
+        if(req.user.role !== 'Student'){
+            return res.status(401).json({
+                success:false,
+                message:'this is protected route!'
+            })
+        }
+        next()
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            error:error.message,
+        }) 
+    }
+}
+
+exports.isAdmin = async (req, res, next) => {
+    try {
+        if(req.user.role !== 'Admin'){
+            return res.status(401).json({
+                success:false,
+                message:'this is protected route!'
+            })
+        }        
+        next()
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            error:error.message,
+        }) 
+    }
+}
