@@ -7,6 +7,11 @@ const {signup,login} =  require('../controllers/Auth')
 // middlewares
 const {auth, isStudent, isAdmin} = require('../middlewares/auth')
 
+router.get("/test",auth, (req,res)=>{
+    res.json({
+        message:"this is test route"
+    })
+} )
 
 router.get("/student",auth, isStudent, (req,res)=>{
     res.json({

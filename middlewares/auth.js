@@ -55,7 +55,7 @@ exports.isAdmin = async (req, res, next) => {
         if(req.user.role !== 'Admin'){
             return res.status(401).json({
                 success:false,
-                message:'this is protected route!'
+                message:'this is protected route for Admin!'
             })
         }        
         next()
