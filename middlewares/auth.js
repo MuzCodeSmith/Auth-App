@@ -1,37 +1,39 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-exports.auth = async (req,res,next) =>{
-    try {
-        const {token} = req.body;
-        if(!token){
-            return res.status(401).json({
-                success:false,
-                message:'Token not found!'
-            })
-        }
-        // verify the token
-        let decode;
-        try {
-            decode = jwt.verify(token, process.env.JWT_SECRET);
-            console.log("decode:",decode)
 
-            req.user = decode
-            
-        } catch (error) {
-            res.status(500).json({
-                success:false,
-                message:"token is invalid",
-            })      
+exports.auth = async (req, res, next) => {
+    try {
+        const authHeader = req.header("Authorization");
+
+        console.log("cookie:",req.cookies.token)
+        console.log("body:",req.body.token)
+        console.log("header:",authHeader)
+
+
+        const token = req.cookies.token || req.body.token || (authHeader && authHeader.replace("Bearer ", ""));
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Token not found!",
+            });
         }
-        next()
+
+        // Verify the token
+        const decode = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decode;
+
+        next(); // Proceed to the next middleware
     } catch (error) {
-        res.status(500).json({
-            success:false,
-            error:error.message,
-        })  
+        return res.status(401).json({
+            success: false,
+            message: "Token is invalid or expired",
+            error: error.message, // Optional: Remove in production
+        });
     }
-}
+};
+
 
 exports.isStudent = async (req,res,next) =>{
     try {
